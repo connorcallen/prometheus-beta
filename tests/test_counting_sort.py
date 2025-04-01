@@ -43,7 +43,7 @@ def test_invalid_input_negative_numbers():
 def test_large_range_numbers():
     """Test sorting with a wide range of numbers"""
     input_list = [100, 3, 2, 1000, 10, 50]
-    assert counting_sort(input_list) == [3, 10, 50, 100, 1000]
+    assert counting_sort(input_list) == [2, 3, 10, 50, 100, 1000]
 
 def test_duplicate_numbers():
     """Test sorting with many duplicate numbers"""
