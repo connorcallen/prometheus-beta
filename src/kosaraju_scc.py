@@ -38,16 +38,19 @@ def find_strongly_connected_components(graph: Dict[int, List[int]]) -> List[List
             if neighbor not in visited:
                 dfs_second_pass(neighbor, component)
     
+    # Ensure all graph nodes are included in the graph dictionary
+    full_graph = {node: graph.get(node, []) for node in set(graph.keys()).union(*graph.values())}
+    
     # First pass: DFS and fill stack with nodes
     visited = set()
     stack = []
-    for node in graph:
+    for node in full_graph:
         if node not in visited:
             dfs_first_pass(node)
     
     # Create reversed graph
     reversed_graph = {}
-    for node, neighbors in graph.items():
+    for node, neighbors in full_graph.items():
         for neighbor in neighbors:
             if neighbor not in reversed_graph:
                 reversed_graph[neighbor] = []
