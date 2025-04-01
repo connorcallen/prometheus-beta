@@ -9,7 +9,7 @@ def test_basic_anagrams():
 
 def test_case_insensitive():
     """Test that anagram check is case-insensitive"""
-    assert are_anagrams("Triangle", "Trailing")
+    assert are_anagrams("Astronomer", "Moon Starer")
     assert are_anagrams("Debit Card", "Bad Credit")
 
 def test_whitespace_handling():
@@ -35,8 +35,8 @@ def test_same_string():
 
 def test_unicode_characters():
     """Test anagrams with unicode characters"""
-    assert are_anagrams("café", "face")
-    assert are_anagrams("Σίγουρα", "ασύγκρι")
+    assert are_anagrams("résumé", "summer")
+    assert are_anagrams("péché", "échep")
 
 def test_invalid_input_types():
     """Test error handling for invalid input types"""
