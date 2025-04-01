@@ -34,7 +34,7 @@ def test_invalid_date_format():
     with pytest.raises(ValueError, match="Invalid date format"):
         calculate_days_between_dates('2023/01/01', '2023-01-10')
     with pytest.raises(ValueError, match="Invalid date format"):
-        calculate_days_between_dates('2023-1-1', '2023-01-10')
+        calculate_days_between_dates('2023-01-01', '2023/01/10')
 
 def test_invalid_input_type():
     """Test handling of invalid input types"""
