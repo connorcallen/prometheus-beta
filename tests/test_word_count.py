@@ -21,4 +21,4 @@ def test_edge_cases():
 def test_mixed_input_types():
     """Test function with different input types."""
     assert count_words(123) == 1  # Non-string inputs are converted
-    assert count_words(["Hello", "world"]) == 1  # Lists convert to strings
+    assert count_words(["Hello", "world"]) == 2  # Lists now correctly convert
