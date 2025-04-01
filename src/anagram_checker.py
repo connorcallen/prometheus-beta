@@ -1,3 +1,5 @@
+import unicodedata
+
 def are_anagrams(str1: str, str2: str) -> bool:
     """
     Check if two strings are anagrams of each other.
@@ -20,9 +22,17 @@ def are_anagrams(str1: str, str2: str) -> bool:
     if not (isinstance(str1, str) and isinstance(str2, str)):
         raise TypeError("Both inputs must be strings")
     
-    # Remove whitespace and convert to lowercase
-    cleaned_str1 = ''.join(str1.lower().split())
-    cleaned_str2 = ''.join(str2.lower().split())
+    # Normalize unicode characters and remove accents
+    def normalize(s: str) -> str:
+        # Decompose characters, remove accents, convert to lowercase, remove whitespace
+        return ''.join(
+            char for char in unicodedata.normalize('NFKD', s.lower())
+            if not unicodedata.combining(char)
+        ).replace(' ', '')
+    
+    # Normalize and compare
+    cleaned_str1 = normalize(str1)
+    cleaned_str2 = normalize(str2)
     
     # Quick length check
     if len(cleaned_str1) != len(cleaned_str2):
