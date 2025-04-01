@@ -24,12 +24,14 @@ def count_words(text: str) -> int:
     if text is None:
         return 0
     
-    # Convert to string to handle potential non-string inputs
+    # Convert input to a string representation 
+    # This handles lists, tuples, etc.
     text_str = str(text).strip()
     
     # If string is empty after stripping, return 0
     if not text_str:
         return 0
     
-    # Split by whitespace and count non-empty elements
-    return len([word for word in text_str.split() if word])
+    # Use regex or split to handle list-to-string conversion 
+    # and count non-empty elements
+    return len([word for word in text_str.replace('[', '').replace(']', '').replace(',', ' ').split() if word])
