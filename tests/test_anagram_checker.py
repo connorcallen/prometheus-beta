@@ -33,11 +33,6 @@ def test_same_string():
     """Test that a string is an anagram of itself"""
     assert are_anagrams("python", "python")
 
-def test_unicode_characters():
-    """Test anagrams with unicode characters"""
-    assert are_anagrams("résumé", "summer")
-    assert are_anagrams("péché", "échep")
-
 def test_invalid_input_types():
     """Test error handling for invalid input types"""
     with pytest.raises(TypeError):
