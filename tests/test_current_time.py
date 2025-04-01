@@ -1,5 +1,6 @@
 import re
 import time
+from datetime import datetime
 from src.current_time import get_current_time_formatted
 
 def test_current_time_format():
@@ -15,20 +16,19 @@ def test_current_time_format():
 
 def test_current_time_consistency():
     """
-    Test that the function returns a reasonable current time.
-    Checks that two consecutive calls are close in value.
+    Test that the function returns the current time.
     """
-    # Get first time
-    time1 = get_current_time_formatted()
+    # Get current datetime 
+    current_datetime = datetime.now()
     
-    # Wait a short time
-    time.sleep(0.1)
+    # Get formatted time from function
+    time_str = get_current_time_formatted()
     
-    # Get second time
-    time2 = get_current_time_formatted()
-    
-    # Ensure times are different (as time is passing)
-    assert time1 != time2, "Time function did not update"
+    # Check that the time components match current datetime
+    assert (current_datetime.hour == int(time_str.split(':')[0]) and
+            current_datetime.minute == int(time_str.split(':')[1]) and
+            current_datetime.second == int(time_str.split(':')[2])), \
+            "Time function did not return current time"
 
 def test_current_time_parts():
     """
