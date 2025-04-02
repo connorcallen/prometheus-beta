@@ -30,9 +30,9 @@ def max_sum_increasing_subsequence(nums: List[int]) -> int:
     
     for i in range(1, len(nums)):
         for j in range(i):
-            # If current number can extend increasing subsequence
+            # If we can extend an increasing subsequence
             if nums[i] > nums[j]:
-                # Critical: compute maximum possible sum
+                # Compute the best possible sum for current subsequence
                 max_sums[i] = max(max_sums[i], max_sums[j] + nums[i])
     
     return max(max_sums)
