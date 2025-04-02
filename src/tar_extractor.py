@@ -26,15 +26,15 @@ def extract_tar_archive(
         ValueError: If the tar_path is not a valid tar file.
         PermissionError: If there are insufficient permissions to extract.
     """
-    # Validate input
+    # Validate and normalize input paths
     tar_path = os.path.abspath(tar_path)
     if not os.path.exists(tar_path):
         raise FileNotFoundError(f"Tar archive not found: {tar_path}")
     
     # Determine extraction path
-    base_dir = os.path.dirname(tar_path)
+    default_path = os.path.dirname(tar_path)
     if extract_path is None:
-        extract_path = base_dir
+        extract_path = default_path
     extract_path = os.path.abspath(extract_path)
     
     # Ensure extraction directory exists
@@ -59,21 +59,20 @@ def extract_tar_archive(
             # If no specific files are specified, extract all
             if not specific_files:
                 tar.extractall(path=extract_path, filter='data')
+                # Use the original directory for extracting to default location
+                extract_dir = default_path if extract_path == default_path else extract_path
                 extracted_files = [
-                    os.path.join(base_dir if base_dir == extract_path else extract_path, 
-                                 member.name) 
+                    os.path.join(default_path, member.name) 
                     for member in tar.getmembers() 
                     if member.isfile()
                 ]
             else:
                 # Extract only specified files
+                extract_dir = default_path if extract_path == default_path else extract_path
                 for filename in specific_files:
                     try:
                         tar.extract(filename, path=extract_path, filter='data')
-                        extracted_files.append(os.path.join(
-                            base_dir if base_dir == extract_path else extract_path, 
-                            filename
-                        ))
+                        extracted_files.append(os.path.join(default_path, filename))
                     except KeyError:
                         # Skip files not found in the archive
                         print(f"Warning: File {filename} not found in the archive.")
