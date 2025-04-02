@@ -60,7 +60,7 @@ def convert_to_alternating_path_case(input_string):
         
         # Convert parts
         converted = [parts[0].lower()]
-        converted.extend(part.capitalize() for part in parts[1:])
+        converted.extend(part if part in ['Ai', 'Gpt'] else part.lower() for part in parts[1:])
         
         return '-'.join(converted)
     
