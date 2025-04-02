@@ -2,7 +2,7 @@ from typing import List
 
 def max_sum_increasing_subsequence(nums: List[int]) -> int:
     """
-    Compute the maximum sum of an increasing subsequence with O(n^2) time complexity.
+    Compute the maximum sum of an increasing subsequence.
     
     Args:
         nums (List[int]): Input array of integers
@@ -10,7 +10,7 @@ def max_sum_increasing_subsequence(nums: List[int]) -> int:
     Returns:
         int: Maximum sum of an increasing subsequence
     
-    Time Complexity: O(n^2)
+    Time Complexity: O(n²)
     Space Complexity: O(n)
     
     Examples:
@@ -26,12 +26,12 @@ def max_sum_increasing_subsequence(nums: List[int]) -> int:
         return 0
     
     # Maximum sums of subsequences
-    max_sums = nums.copy()
+    dp = nums.copy()
     
     for i in range(1, len(nums)):
         for j in range(i):
-            # If we can extend an increasing subsequence
+            # Key difference: Extend only if truly increasing subsequence
             if nums[i] > nums[j]:
-                max_sums[i] = max(max_sums[i], max_sums[j] + nums[i])
+                dp[i] = max(dp[i], dp[j] + nums[i])
     
-    return max(max_sums)
+    return max(dp)
