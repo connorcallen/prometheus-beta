@@ -7,14 +7,16 @@ def test_compress_string():
     original = "Hello, World! This is a test of Zlib compression."
     compressed = compress_data(original)
     assert isinstance(compressed, bytes)
-    assert len(compressed) < len(original.encode('utf-8'))
+    # For small, random-like strings, compression might not always reduce size
+    assert 0 < len(compressed)
 
 def test_compress_bytes():
     """Test compression of bytes."""
     original = b"Hello, World! This is a test of Zlib compression."
     compressed = compress_data(original)
     assert isinstance(compressed, bytes)
-    assert len(compressed) < len(original)
+    # For small, random-like strings, compression might not always reduce size
+    assert 0 < len(compressed)
 
 def test_decompress_data():
     """Test decompression of compressed data."""
@@ -22,6 +24,12 @@ def test_decompress_data():
     compressed = compress_data(original)
     decompressed = decompress_data(compressed)
     assert decompressed.decode('utf-8') == original
+
+def test_compress_large_data():
+    """Verify compression reduces size for larger, repetitive data."""
+    original = "Repeated text " * 100  # Create a larger, repetitive text
+    compressed = compress_data(original)
+    assert len(compressed) < len(original)
 
 def test_different_compression_levels():
     """Test compression with different levels."""
