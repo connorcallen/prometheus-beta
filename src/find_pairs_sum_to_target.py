@@ -21,7 +21,7 @@ def find_pairs_sum_to_target(numbers, target):
         raise TypeError("Target must be a numeric value")
 
     # Convert to a set for O(1) lookup and remove duplicates
-    num_set = set()
+    num_count = {}
     unique_pairs = set()
 
     for num in numbers:
@@ -31,20 +31,26 @@ def find_pairs_sum_to_target(numbers, target):
         except (TypeError, ValueError):
             raise ValueError(f"Invalid number in input list: {num}")
         
+        # Count occurrences of each number
+        num_count[num] = num_count.get(num, 0) + 1
+        
         # Check if the complement exists
         complement = target - num
         
-        # If complement exists and is different from current number
-        if complement in num_set and num != complement:
-            # Always store the smaller number first to ensure unique pairs
-            pair = tuple(sorted((num, complement)))
-            unique_pairs.add(pair)
-        
-        # Add current number to set
-        num_set.add(num)
+        # If complement exists in count
+        if complement in num_count:
+            # Special handling for when num == complement
+            if num == complement:
+                # Ensure at least 2 of the same number exists
+                if num_count[num] > 1:
+                    pair = (num, num)
+                    unique_pairs.add(pair)
+            elif num < complement:  # Avoid duplicate pairs
+                pair = (num, complement)
+                unique_pairs.add(pair)
     
     # Convert back to integer pairs if all numbers are integer-like
-    if all(x.is_integer() for x in [target] + list(num_set)):
+    if all(x.is_integer() for x in [target] + list(num_count.keys())):
         return [tuple(map(int, pair)) for pair in unique_pairs]
     
     return list(unique_pairs)
