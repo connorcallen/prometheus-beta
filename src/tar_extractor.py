@@ -32,8 +32,9 @@ def extract_tar_archive(
         raise FileNotFoundError(f"Tar archive not found: {tar_path}")
     
     # Determine extraction path
+    base_dir = os.path.dirname(tar_path)
     if extract_path is None:
-        extract_path = os.path.dirname(tar_path)
+        extract_path = base_dir
     extract_path = os.path.abspath(extract_path)
     
     # Ensure extraction directory exists
@@ -59,7 +60,8 @@ def extract_tar_archive(
             if not specific_files:
                 tar.extractall(path=extract_path, filter='data')
                 extracted_files = [
-                    os.path.join(extract_path, member.name) 
+                    os.path.join(base_dir if base_dir == extract_path else extract_path, 
+                                 member.name) 
                     for member in tar.getmembers() 
                     if member.isfile()
                 ]
@@ -68,7 +70,10 @@ def extract_tar_archive(
                 for filename in specific_files:
                     try:
                         tar.extract(filename, path=extract_path, filter='data')
-                        extracted_files.append(os.path.join(extract_path, filename))
+                        extracted_files.append(os.path.join(
+                            base_dir if base_dir == extract_path else extract_path, 
+                            filename
+                        ))
                     except KeyError:
                         # Skip files not found in the archive
                         print(f"Warning: File {filename} not found in the archive.")
