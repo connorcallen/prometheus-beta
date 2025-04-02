@@ -74,7 +74,8 @@ def test_extract_to_default_directory(sample_tar_archive):
     extracted_files = extract_tar_archive(sample_tar_archive)
     
     assert len(extracted_files) == 3
-    assert all(os.path.dirname(f) == original_dir for f in extracted_files)
+    # Check if files are extracted in the same directory as the tar file
+    assert all(os.path.dirname(f) in [original_dir] for f in extracted_files)
 
 
 def test_non_existent_tar_file():
