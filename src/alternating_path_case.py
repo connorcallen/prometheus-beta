@@ -1,3 +1,5 @@
+import re
+
 def convert_to_alternating_path_case(input_string):
     """
     Convert a string to alternating path case.
@@ -32,26 +34,25 @@ def convert_to_alternating_path_case(input_string):
     if not input_string:
         return ""
     
-    # If the input is a single word with mixed case, handle it specially
+    # If it's a single word with multiple cases, handle it specially
+    def split_camel_case(s):
+        # Use regex to split camel case words
+        return re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|\d+', s)
+    
+    # If input is a single "word" with mixed case
     if len(input_string.split()) == 1:
-        # Split the word into parts based on case changes
-        parts = []
-        current_part = input_string[0].lower()
-        for char in input_string[1:]:
-            if char.isupper():
-                # Start new part when we hit an uppercase letter
-                parts.append(current_part)
-                current_part = char.lower()
-            else:
-                current_part += char
-        parts.append(current_part)
+        # Split into parts
+        parts = split_camel_case(input_string)
         
-        # Capitalize alternate parts
-        result = [parts[0]]
-        for part in parts[1:]:
-            result.append(part.capitalize())
+        # Convert first part to lowercase, rest to proper case
+        if len(parts) == 1:
+            return parts[0].lower()
         
-        return '-'.join(result)
+        # Convert parts
+        converted = [parts[0].lower()]
+        converted.extend(part.capitalize() for part in parts[1:])
+        
+        return '-'.join(converted)
     
     # Split the input string into words
     words = input_string.split()
