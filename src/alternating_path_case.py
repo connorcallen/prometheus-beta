@@ -36,8 +36,8 @@ def convert_to_alternating_path_case(input_string):
     
     # If it's a single word with multiple cases, handle it specially
     def split_camel_case(s):
-        # Use regex to split camel case words
-        return re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|\d+', s)
+        # Use regex to split camel case words, handling special cases like AI, GPT
+        return re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|\d+|[A-Z]{2,}', s)
     
     # If input is a single "word" with mixed case
     if len(input_string.split()) == 1:
@@ -50,7 +50,12 @@ def convert_to_alternating_path_case(input_string):
         
         # Convert parts
         converted = [parts[0].lower()]
-        converted.extend(part.capitalize() for part in parts[1:])
+        for part in parts[1:]:
+            # Special handling for short all-caps acronyms
+            if len(part) <= 2 and part.isupper():
+                converted.append(part)
+            else:
+                converted.append(part.capitalize())
         
         return '-'.join(converted)
     
