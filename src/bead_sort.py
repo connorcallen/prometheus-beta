@@ -22,20 +22,21 @@ def bead_sort(arr):
     if any(not isinstance(x, int) or x < 0 for x in arr):
         raise ValueError("Bead sort only works with non-negative integers")
     
+    # Handle single element case
+    if len(arr) == 1:
+        return arr.copy()
+    
     # Find the maximum number to determine the number of 'rods'
     max_num = max(arr)
     
     # Create a 2D representation of beads
-    beads = [[1 if n >= k+1 else 0 for n in arr] for k in range(max_num)]
+    beads = [[1 if x >= i+1 else 0 for x in arr] for i in range(max_num)]
     
-    # 'Drop' the beads (simulate gravity)
-    for i in range(max_num):
-        # Count beads in each column
-        col_sum = sum(row[i] for row in beads)
-        
-        # Redistribute beads from bottom to top
-        for j in range(len(arr)):
-            beads[i][j] = 1 if col_sum > j else 0
+    # Simulate gravity by counting beads in each column
+    sorted_arr = []
+    for j in range(len(arr)):
+        # Count beads in this 'rod'
+        col_sum = sum(row[j] for row in beads)
+        sorted_arr.append(col_sum)
     
-    # Reconstruct the sorted array
-    return [sum(row) for row in zip(*beads)]
+    return sorted_arr
