@@ -27,23 +27,24 @@ def find_pairs_sum_to_target(numbers, target):
         raise ValueError("Invalid number in input list")
 
     # Track pairs and numbers
-    num_set = set()
+    num_count = {}
     unique_pairs = set()
 
     for num in numbers:
         complement = target - num
         
-        # If complement is in the set, we found a pair
-        if complement in num_set:
-            # Ensure unique pairs and avoid duplicates
-            pair = tuple(sorted((num, complement)))
-            unique_pairs.add(pair)
+        # If complement exists
+        if complement in num_count:
+            # Check for duplicates or unique pairs
+            if num != complement or num_count.get(num, 0) > 1:
+                pair = tuple(sorted((num, complement)))
+                unique_pairs.add(pair)
         
-        # Add current number to the set
-        num_set.add(num)
+        # Update number count
+        num_count[num] = num_count.get(num, 0) + 1
     
     # Convert back to integer pairs if possible
-    if all(x.is_integer() for x in [target] + list(num_set)):
+    if all(x.is_integer() for x in [target] + list(num_count.keys())):
         return [tuple(map(int, pair)) for pair in unique_pairs]
     
     return list(unique_pairs)
