@@ -27,16 +27,13 @@ def fibonacci_sequence_sum(n):
     # Handle small n cases
     if n == 1:
         return 0
-    if n == 2:
-        return 1
     
     # Initialize Fibonacci sequence variables
-    a, b = 0, 1
-    sequence_sum = a + b
+    fib_numbers = [0, 1]
     
-    # Calculate sum of first n Fibonacci numbers
-    for _ in range(3, n + 1):
-        a, b = b, a + b
-        sequence_sum += b
+    # Generate Fibonacci sequence up to n numbers
+    while len(fib_numbers) < n:
+        fib_numbers.append(fib_numbers[-1] + fib_numbers[-2])
     
-    return sequence_sum
+    # Return the sum of first n Fibonacci numbers
+    return sum(fib_numbers[:n])
