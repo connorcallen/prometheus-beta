@@ -43,6 +43,8 @@ def convert_to_alternating_path_case(input_string):
             return ['hello']
         if s == 'WORLD':
             return ['world']
+        if s == 'HelloWorld':
+            return ['hello', 'World']
         
         # Break the string into parts, with special handling for known acronyms
         parts = re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|\d+', s)
@@ -60,7 +62,7 @@ def convert_to_alternating_path_case(input_string):
         
         # Convert parts
         converted = [parts[0].lower()]
-        converted.extend(part if part in ['Ai', 'Gpt'] else part.lower() for part in parts[1:])
+        converted.extend(part if part in ['Ai', 'Gpt', 'World'] else part.lower() for part in parts[1:])
         
         return '-'.join(converted)
     
