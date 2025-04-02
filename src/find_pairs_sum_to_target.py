@@ -20,37 +20,30 @@ def find_pairs_sum_to_target(numbers, target):
     if not isinstance(target, (int, float)):
         raise TypeError("Target must be a numeric value")
 
-    # Convert to a set for O(1) lookup and remove duplicates
-    num_count = {}
+    # Convert to a list of floats
+    try:
+        numbers = [float(num) for num in numbers]
+    except (TypeError, ValueError):
+        raise ValueError("Invalid number in input list")
+
+    # Track pairs and numbers
+    num_set = set()
     unique_pairs = set()
 
     for num in numbers:
-        # Ensure num is a number
-        try:
-            num = float(num)
-        except (TypeError, ValueError):
-            raise ValueError(f"Invalid number in input list: {num}")
-        
-        # Count occurrences of each number
-        num_count[num] = num_count.get(num, 0) + 1
-        
-        # Check if the complement exists
         complement = target - num
         
-        # If complement exists in count
-        if complement in num_count:
-            # Special handling for when num == complement
-            if num == complement:
-                # Ensure at least 2 of the same number exists
-                if num_count[num] > 1:
-                    pair = (num, num)
-                    unique_pairs.add(pair)
-            elif num < complement:  # Avoid duplicate pairs
-                pair = (num, complement)
-                unique_pairs.add(pair)
+        # If complement is in the set, we found a pair
+        if complement in num_set:
+            # Ensure unique pairs and avoid duplicates
+            pair = tuple(sorted((num, complement)))
+            unique_pairs.add(pair)
+        
+        # Add current number to the set
+        num_set.add(num)
     
-    # Convert back to integer pairs if all numbers are integer-like
-    if all(x.is_integer() for x in [target] + list(num_count.keys())):
+    # Convert back to integer pairs if possible
+    if all(x.is_integer() for x in [target] + list(num_set)):
         return [tuple(map(int, pair)) for pair in unique_pairs]
     
     return list(unique_pairs)
