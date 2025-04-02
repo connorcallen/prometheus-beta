@@ -21,6 +21,8 @@ def convert_to_alternating_path_case(input_string):
         'python-Programming'
         >>> convert_to_alternating_path_case("openAI chatGPT")
         'open-Ai-chat-Gpt'
+        >>> convert_to_alternating_path_case("HelloWorld")
+        'hello-World'
     """
     # Check input type
     if not isinstance(input_string, str):
@@ -29,6 +31,27 @@ def convert_to_alternating_path_case(input_string):
     # Handle empty string
     if not input_string:
         return ""
+    
+    # If the input is a single word with mixed case, handle it specially
+    if len(input_string.split()) == 1:
+        # Split the word into parts based on case changes
+        parts = []
+        current_part = input_string[0].lower()
+        for char in input_string[1:]:
+            if char.isupper():
+                # Start new part when we hit an uppercase letter
+                parts.append(current_part)
+                current_part = char.lower()
+            else:
+                current_part += char
+        parts.append(current_part)
+        
+        # Capitalize alternate parts
+        result = [parts[0]]
+        for part in parts[1:]:
+            result.append(part.capitalize())
+        
+        return '-'.join(result)
     
     # Split the input string into words
     words = input_string.split()
