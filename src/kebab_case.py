@@ -34,21 +34,33 @@ def to_kebab_case(input_string: str) -> str:
         return ""
     
     # Convert to lowercase and replace various separators
-    # First, insert hyphen before capital letters
-    converted = ''
+    converted = []
+    prev_char_type = None
     for i, char in enumerate(input_string):
-        # Add hyphen before capital letters, except for the first character
-        if i > 0 and char.isupper():
-            converted += '-'
+        if not char.isalnum():
+            # Replace non-alphanumeric characters with hyphen
+            if converted and converted[-1] != '-':
+                converted.append('-')
+            continue
         
-        # Convert to lowercase and handle non-alphanumeric characters
-        if char.isalnum():
-            converted += char.lower()
-        elif char.isspace():
-            converted += '-'
+        # Handle consecutive capital letters and transitions
+        curr_char_type = 'upper' if char.isupper() else 'lower'
+        if (i > 0 and 
+            ((curr_char_type == 'upper' and prev_char_type == 'lower') or  # camelCase transition
+             (char.isupper() and prev_char_type == 'upper'))):  # UPPERCASE sequence
+            if converted and converted[-1] != '-':
+                converted.append('-')
+        
+        # Add lowercase character
+        converted.append(char.lower())
+        prev_char_type = curr_char_type
+    
+    # Convert snake_case and handle special characters
+    result = ''.join(converted)
+    result = result.replace('_', '-')
     
     # Remove consecutive hyphens and strip leading/trailing hyphens
-    while '--' in converted:
-        converted = converted.replace('--', '-')
+    while '--' in result:
+        result = result.replace('--', '-')
     
-    return converted.strip('-')
+    return result.strip('-')
