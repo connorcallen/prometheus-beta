@@ -27,12 +27,14 @@ def extract_tar_archive(
         PermissionError: If there are insufficient permissions to extract.
     """
     # Validate input
+    tar_path = os.path.abspath(tar_path)
     if not os.path.exists(tar_path):
         raise FileNotFoundError(f"Tar archive not found: {tar_path}")
     
     # Determine extraction path
     if extract_path is None:
-        extract_path = os.path.dirname(tar_path) or '.'
+        extract_path = os.path.dirname(tar_path)
+    extract_path = os.path.abspath(extract_path)
     
     # Ensure extraction directory exists
     os.makedirs(extract_path, exist_ok=True)
@@ -55,7 +57,7 @@ def extract_tar_archive(
             
             # If no specific files are specified, extract all
             if not specific_files:
-                tar.extractall(path=extract_path)
+                tar.extractall(path=extract_path, filter='data')
                 extracted_files = [
                     os.path.join(extract_path, member.name) 
                     for member in tar.getmembers() 
@@ -65,7 +67,7 @@ def extract_tar_archive(
                 # Extract only specified files
                 for filename in specific_files:
                     try:
-                        tar.extract(filename, path=extract_path)
+                        tar.extract(filename, path=extract_path, filter='data')
                         extracted_files.append(os.path.join(extract_path, filename))
                     except KeyError:
                         # Skip files not found in the archive
