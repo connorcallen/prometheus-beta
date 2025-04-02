@@ -12,9 +12,14 @@ def get_file_owner(file_path):
         str: Username of the file owner.
 
     Raises:
+        TypeError: If file_path is not a string.
         FileNotFoundError: If the specified file does not exist.
         PermissionError: If there's no permission to access file metadata.
     """
+    # Type checking
+    if not isinstance(file_path, str):
+        raise TypeError("file_path must be a string")
+    
     # Validate file path
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"The file {file_path} does not exist.")
