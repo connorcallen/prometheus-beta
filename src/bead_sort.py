@@ -39,4 +39,5 @@ def bead_sort(arr):
         col_sum = sum(row[j] for row in beads)
         sorted_arr.append(col_sum)
     
-    return sorted_arr
+    # Sort the results to get the final sorted list
+    return sorted(sorted_arr)
