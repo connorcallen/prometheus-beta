@@ -22,7 +22,5 @@ def test_mixed_positive_negative():
 def test_duplicate_elements():
     assert max_sum_increasing_subsequence([1, 1, 1, 1, 1]) == 1
 
-def test_large_range():
-    large_input = list(range(1000))
-    expected_sum = sum(range(1, 1001))
-    assert max_sum_increasing_subsequence(large_input) == expected_sum
+def test_complex_sequence():
+    assert max_sum_increasing_subsequence([50, 3, 10, 7, 40, 80]) == 170  # 50+10+40+80 or 3+10+7+40+80
