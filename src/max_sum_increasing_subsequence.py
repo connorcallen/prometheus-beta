@@ -25,19 +25,14 @@ def max_sum_increasing_subsequence(nums: List[int]) -> int:
     if not nums:
         return 0
     
-    # Maximum sums of subsequences
+    # Maximum sum at each index
     dp = nums.copy()
     
-    global_max = dp[0]
-    
+    # Compute maximum increasing subsequence sum
     for i in range(1, len(nums)):
         for j in range(i):
-            # If current number can extend a strictly increasing subsequence
             if nums[i] > nums[j]:
-                # Update current maximum with potential larger subsequence
+                # Update maximum possible sum by considering previous increasing subsequences
                 dp[i] = max(dp[i], dp[j] + nums[i])
-        
-        # Track global maximum for all subsequences
-        global_max = max(global_max, dp[i])
     
-    return global_max
+    return max(dp)
