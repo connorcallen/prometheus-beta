@@ -1,5 +1,4 @@
 from typing import List
-import bisect
 
 def max_sum_increasing_subsequence(nums: List[int]) -> int:
     """
@@ -26,25 +25,13 @@ def max_sum_increasing_subsequence(nums: List[int]) -> int:
     if not nums:
         return 0
     
-    # Stores the maximum sum of increasing subsequence for each length
-    max_sums = [nums[0]]
-    # Stores the corresponding elements that achieve these sums
-    subsequence = [nums[0]]
+    # Dynamic programming approach to track max sum of increasing subsequence
+    dp = nums.copy()
     
-    for num in nums[1:]:
-        # If current number is greater than the last in subsequence
-        if num > subsequence[-1]:
-            max_sums.append(max_sums[-1] + num)
-            subsequence.append(num)
-        else:
-            # Find the right position to insert/replace to maintain increasing subsequence
-            index = bisect.bisect_left(subsequence, num)
-            subsequence[index] = num
-            
-            # Update max_sums for that index
-            if index == 0:
-                max_sums[index] = num
-            else:
-                max_sums[index] = max_sums[index-1] + num
+    for i in range(1, len(nums)):
+        for j in range(i):
+            # If current number can extend a previous increasing subsequence
+            if nums[i] > nums[j]:
+                dp[i] = max(dp[i], dp[j] + nums[i])
     
-    return max(max_sums)
+    return max(dp)
