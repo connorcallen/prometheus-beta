@@ -35,50 +35,31 @@ def to_kebab_case(input_string: str) -> str:
     
     # Convert to lowercase and replace various separators
     converted = []
-    i = 0
-    while i < len(input_string):
-        char = input_string[i]
-        
+    for i, char in enumerate(input_string):
         # Skip non-alphanumeric characters
         if not char.isalnum():
             if converted and converted[-1] != '-':
                 converted.append('-')
-            i += 1
             continue
         
-        # Handle consecutive uppercase (like HTTP)
-        if char.isupper():
-            # Look ahead to see if it's an acronym
-            j = i
-            while j < len(input_string) and input_string[j].isupper():
-                j += 1
+        # Detect transitions between characters
+        if i > 0:
+            prev_char = input_string[i-1]
             
-            # If it's an acronym (multiple consecutive uppercase)
-            if j > i + 1:
-                # Add the entire uppercase sequence as lowercase
-                converted.append(input_string[i:j].lower())
-                i = j
-                # Add a hyphen if needed
-                if i < len(input_string) and converted and converted[-1] != '-':
+            # Add hyphen on camelCase or PascalCase transitions
+            if ((char.isupper() and prev_char.islower()) or  # camelCase
+                (char.isupper() and prev_char.isupper() and 
+                 i+1 < len(input_string) and input_string[i+1].islower())):  # Acronym to normal case
+                if converted and converted[-1] != '-':
                     converted.append('-')
-                continue
-        
-        # Handle typical case and camelCase/PascalCase transitions
-        if (i > 0 and 
-            ((char.isupper() and not input_string[i-1].isupper()) or  # start of new word
-             (char.isupper() and i+1 < len(input_string) and input_string[i+1].islower()))):  # camelCase or PascalCase
-            if converted and converted[-1] != '-':
-                converted.append('-')
         
         # Add lowercase character
         converted.append(char.lower())
-        i += 1
     
-    # Convert snake_case and handle special characters
+    # Convert snake_case to kebab-case and remove consecutive hyphens
     result = ''.join(converted)
     result = result.replace('_', '-')
     
-    # Remove consecutive hyphens and strip leading/trailing hyphens
     while '--' in result:
         result = result.replace('--', '-')
     
