@@ -35,12 +35,16 @@ def find_pairs_sum_to_target(numbers, target):
         complement = target - num
         
         # If complement exists and is different from current number
-        if complement in num_set:
+        if complement in num_set and num != complement:
             # Always store the smaller number first to ensure unique pairs
             pair = tuple(sorted((num, complement)))
             unique_pairs.add(pair)
         
         # Add current number to set
         num_set.add(num)
+    
+    # Convert back to integer pairs if all numbers are integer-like
+    if all(x.is_integer() for x in [target] + list(num_set)):
+        return [tuple(map(int, pair)) for pair in unique_pairs]
     
     return list(unique_pairs)
